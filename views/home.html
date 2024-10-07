@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lego Collection</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+    <nav class="navbar bg-base-100">
+        <a href="/" class="text-2xl font-bold">Lego Collection</a>
+        <a href="/about" class="ml-auto">About</a>
+        <div class="dropdown dropdown-hover">
+            <label tabindex="0" class="btn">Themes</label>
+            <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+                <li><a href="/lego/sets?theme=Star%20Wars">Star Wars</a></li>
+                <li><a href="/lego/sets?theme=Technic">Technic</a></li>
+                <li><a href="/lego/sets?theme=City">City</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mx-auto">
+        <div class="hero min-h-screen bg-base-200">
+            <div class="hero-content text-center">
+                <div class="max-w-lg">
+                    <h1 class="text-5xl font-bold">Explore My Lego Collection</h1>
+                    <p class="py-6">Discover a variety of Lego sets across different themes.</p>
+                    <a href="/lego/sets" class="btn btn-primary">Explore Sets</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grid of Lego Sets -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="card w-full bg-base-100 shadow-xl">
+                <figure><img src="path_to_img" alt="Set Image" /></figure>
+                <div class="card-body">
+                    <h2 class="card-title">Set Name</h2>
+                    <p>Set description or blurb.</p>
+                    <a href="/lego/sets/001-1" class="btn btn-primary">View Set</a>
+                </div>
+            </div>
+            <!-- Add 2 more cards similarly -->
+        </div>
+    </div>
+</body>
+</html>
