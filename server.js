@@ -53,41 +53,77 @@ app.use((req, res) => {
 });
 
 
-// Route to manage Lego sets, filtered by "theme" query parameter (optional)
+// // Route to manage Lego sets, filtered by "theme" query parameter (optional)
+// app.get("/lego/sets", (req, res) => {
+//   const theme = req.query.theme;
+  
+//   if (theme) {
+//     // If theme is provided, return sets matching that theme
+//     legoData.getSetsByTheme(theme)
+//       .then(sets => {
+//         if (sets.length === 0) {
+//           return res.status(404).send(`No Lego sets found for theme: ${theme}`);
+//         }
+//         res.json(sets);
+//       })
+//       .catch(err => res.status(500).send(err));
+//   } else {
+//     // Return all Lego sets if no theme is provided
+//     legoData.getAllSets()
+//       .then(sets => res.json(sets))
+//       .catch(err => res.status(500).send(err));
+//   }
+// });
+
+// // Dynamic route to manage Lego sets by its "set_num"
+// app.get("/lego/sets/:set_num", (req, res) => {
+//   const setNum = req.params.set_num;
+
+//   legoData.getSetByNum(setNum)
+//     .then(set => {
+//       if (!set) {
+//         return res.status(404).send(`Lego set with set number ${setNum} not found`);
+//       }
+//       res.json(set);
+//     })
+//     .catch(err => res.status(500).send(err));
+// });
+
+// Serve Lego sets, with optional theme query parameter
 app.get("/lego/sets", (req, res) => {
   const theme = req.query.theme;
-  
+
   if (theme) {
-    // If theme is provided, return sets matching that theme
+    // Get sets by theme if the 'theme' query parameter is present
     legoData.getSetsByTheme(theme)
-      .then(sets => {
-        if (sets.length === 0) {
-          return res.status(404).send(`No Lego sets found for theme: ${theme}`);
-        }
-        res.json(sets);
-      })
-      .catch(err => res.status(500).send(err));
+      .then(sets => res.json(sets))
+      .catch(err => {
+        console.error(`Error fetching sets by theme: ${err}`);
+        res.status(404).send("No sets found for this theme.");
+      });
   } else {
-    // Return all Lego sets if no theme is provided
+    // Get all sets if no 'theme' query parameter is present
     legoData.getAllSets()
       .then(sets => res.json(sets))
-      .catch(err => res.status(500).send(err));
+      .catch(err => {
+        console.error(`Error fetching all sets: ${err}`);
+        res.status(500).send("Error retrieving sets.");
+      });
   }
 });
 
-// Dynamic route to manage Lego sets by its "set_num"
+// Serve a specific Lego set by set_num
 app.get("/lego/sets/:set_num", (req, res) => {
   const setNum = req.params.set_num;
 
   legoData.getSetByNum(setNum)
-    .then(set => {
-      if (!set) {
-        return res.status(404).send(`Lego set with set number ${setNum} not found`);
-      }
-      res.json(set);
-    })
-    .catch(err => res.status(500).send(err));
+    .then(set => res.json(set))
+    .catch(err => {
+      console.error(`Error fetching set with set_num ${setNum}: ${err}`);
+      res.status(404).send("Set not found.");
+    });
 });
+
 
 
 //old solution
@@ -111,4 +147,7 @@ app.get("/lego/sets/:set_num", (req, res) => {
 //     .catch(err => res.status(404).send(err));
 // });
 
-//console.log(legoData.getAllSets());
+console.log(legoData.getAllSets());
+
+// refisar si imprime los sets 
+//hacer un componente embebido para hacer el display de la inof del json
