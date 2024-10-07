@@ -1,33 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About</title>
-    <link rel="stylesheet" href="/css/main.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/css/main.css" rel="stylesheet">
+  <title>About - Lego Collection</title>
 </head>
-<body>
-    <nav class="navbar bg-base-100">
-        <a href="/" class="text-2xl font-bold">Lego Collection</a>
-        <a href="/" class="ml-auto active">Home</a>
-        <!-- Same dropdown as in home.html -->
-    </nav>
-
-    <div class="container mx-auto">
-        <div class="hero min-h-screen bg-base-200">
-            <div class="hero-content text-center">
-                <h1 class="text-5xl font-bold">About Me</h1>
-                <p class="py-6">All about my passion for Lego and more...</p>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div><img src="your_image.jpg" alt="Your Image" class="w-full h-auto" /></div>
-            <div>
-                <h2 class="text-2xl font-bold">About Me</h2>
-                <p>Short description about yourself, your hobbies, and interests.</p>
-            </div>
-        </div>
+<body class="bg-base-100">
+  <!-- Navbar -->
+  <nav class="navbar bg-base-100 px-4">
+    <div class="flex-1">
+      <a class="btn btn-ghost normal-case text-xl" href="/">Lego Collection</a>
     </div>
+    <div class="ml-auto flex-none">
+      <ul class="menu menu-horizontal p-0">
+        <li><a class="active" href="/about">About</a></li>
+        <li tabindex="0">
+          <a class="btn btn-ghost">Theme</a>
+          <ul class="p-2 bg-base-100">
+            <li><a href="/lego/sets?theme=Icons">Icons</a></li>
+            <li><a href="/lego/sets?theme=Technic">Technic</a></li>
+            <li><a href="/lego/sets?theme=Star Wars">Star Wars</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <div class="hero min-h-screen bg-base-200">
+    <div class="hero-content text-center">
+      <div class="max-w-md">
+        <h1 class="text-5xl font-bold">About</h1>
+        <p class="py-6">All about me and my passion for Lego collections.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- About Section -->
+  <div class="container mx-auto my-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Left Column - Image -->
+      <div class="flex justify-center">
+        <img src="https://example.com/your-image.jpg" alt="A representation of myself" class="rounded-lg shadow-xl">
+      </div>
+      <!-- Right Column - Blurb -->
+      <div class="flex flex-col justify-center">
+        <h2 class="text-3xl font-bold mb-4">Hello, I'm Jorge Luis!</h2>
+        <p class="mb-4">I'm a huge fan of Lego sets, especially the intricate and detailed ones that challenge my creativity. When I'm not building, you can find me exploring new technologies, playing video games, or studying for my computer science courses.</p>
+        <p class="mb-4">Currently, I'm enrolled in various courses that dive into web development, backend programming, and user experience design. My hobbies include hiking, reading sci-fi novels, and spending time with my family and friends.</p>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
