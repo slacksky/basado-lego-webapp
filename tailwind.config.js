@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content:  [`./views/**/*.html`], // should watchall .html files
+  content:  [`./views/**/*.ejs`], // now tracking the ejs files
   theme: {
     extend: {},
   },

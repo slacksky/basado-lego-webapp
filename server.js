@@ -20,6 +20,7 @@ const legoData = require("./modules/legoSets");
 const app = express();
 const PORT = process.env.PORT || 3000; // port by env var?
 //const PORT = 3000;
+app.set("view engine", "ejs");// ejs as the viewing engine
 
 
 // Middleware to serve static files from the "public" folder
@@ -39,12 +40,12 @@ legoData.initialize()
 
 // Updated to serve the landing page (home.html)
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "home.html"));
+  res.render("home");
 });
 
 // Addtion to serve the About page (about.html)
 app.get("/about", (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "about.html"));
+  res.render("about");
 });
 
 
@@ -106,9 +107,8 @@ app.get('/lego/sets/:id', (req, res) => {
 
 
 // Addition serve the 404 page case
-app.use((req, res) => {
-  res.status(404).sendFile(path.join(__dirname, "views", "404.html"));
-});
+app.use((req, res) =>   res.status(404).render("404"));
+
 //console.log(legoData.getAllSets());
 
 // refisar si imprime los sets 
