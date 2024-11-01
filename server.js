@@ -8,7 +8,7 @@
 * 
 *  Name: Jorge Luis Vivas Castellanos Student ID: 1126255291 Date: 06oct24
 *
-*  Published URL: ___________________________________________________________
+*  Published URL: https://basado-lego-webapp-cld7-p3u833kcc-jorge-vivas-projects-b5e9873b.vercel.app/
 *
 ********************************************************************************/
 
