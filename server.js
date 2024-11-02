@@ -1,12 +1,12 @@
 /********************************************************************************
-*  WEB322 – Assignment 03
+*  WEB322 – Assignment 04
 * 
 *  I declare that this assignment is my own work in accordance with Seneca's
 *  Academic Integrity Policy:
 * 
 *  https://www.senecacollege.ca/about/policies/academic-integrity-policy.html
 * 
-*  Name: Jorge Luis Vivas Castellanos Student ID: 1126255291 Date: 06oct24
+*  Name: Jorge Luis Vivas Castellanos Student ID: 1126255291 Date: 01Nov24
 *
 *  Published URL: https://basado-lego-webapp-cld7-p3u833kcc-jorge-vivas-projects-b5e9873b.vercel.app/
 *
@@ -20,7 +20,9 @@ const legoData = require("./modules/legoSets");
 const app = express();
 const PORT = process.env.PORT || 3000; // port by env var?
 //const PORT = 3000;
-app.set("view engine", "ejs");// ejs as the viewing engine
+//app.set("view engine", "ejs");// ejs as the viewing engine
+app.set("views", path.join(__dirname, "views"));//adapting to vercel?
+
 
 
 // Middleware to serve static files from the "public" folder
