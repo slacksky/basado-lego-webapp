@@ -11,15 +11,13 @@
   <!-- Navbar Partial -->
   <%- include('partials/navbar', { page: '/lego/sets', theme: theme }) %>
 
-  <!-- Collection Section -->
-  <div class="collection min-h-screen bg-base-200">
-    <div class="collection text-center">
-      <div class="max-w-md">
-        <h1 class="text-5xl font-bold">Lego Collection</h1>
-        <p class="py-6">Browse through the amazing Lego sets!</p>
-      </div>
-    </div>
-  </div>
+ <!-- Hero Section -->
+ <%- include('partials/collections', {
+    title: 'Collection',
+    description: 'Explore our extensive collection of Lego sets by theme.',
+    buttonLink: '/lego/sets',
+    buttonText: 'Explore Now'
+}) %>
   
   <!-- Sets Table -->
   <div class="container mx-auto my-8">

@@ -12,15 +12,12 @@
   <%- include('partials/navbar', { page: '/' }) %>
 
   <!-- Hero Section -->
-  <div class="hero min-h-screen bg-base-200">
-    <div class="hero-content text-center">
-      <div class="max-w-md">
-        <h1 class="text-5xl font-bold">Welcome to the Lego Collection</h1>
-        <p class="py-6">Explore our extensive collection of Lego sets. Find your favorite themes and sets.</p>
-        <a href="/lego/sets" class="btn btn-primary">Explore Now</a>
-      </div>
-    </div>
-  </div>
+  <%- include('partials/hero', {
+    title: 'Collection',
+    description: 'Explore our extensive collection of Lego sets by theme.',
+    buttonLink: '/lego/sets',
+    buttonText: 'Explore Now'
+}) %>
 
   <!-- Lego Sets Section -->
   <div class="container mx-auto my-8">
