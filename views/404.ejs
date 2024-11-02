@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="cupcake">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +7,7 @@
   <title>Page Not Found - Lego Collection</title>
 </head>
 <body class="bg-base-100">
-  <!-- Navbar partial-->
+  <!-- Navbar partial -->
   <%- include('partials/navbar', { page: '' }) %>
 
   <!-- 404 Hero Section -->
@@ -15,8 +15,14 @@
     <div class="hero-content text-center">
       <div class="max-w-md">
         <h1 class="text-6xl font-bold">404</h1>
-        <p class="py-6 text-xl">Oops! The page you're looking for doesn't exist.</p>
+        
+        <!-- Dynamic error message -->
+        <p class="py-6 text-xl">
+          <%= message || "Oops! The page you're looking for doesn't exist." %>
+        </p>
+        
         <img src="https://example.com/404-image.jpg" alt="A sad Lego character" class="rounded-lg shadow-lg mb-6">
+        
         <a href="/" class="btn btn-primary">Go Back Home</a>
       </div>
     </div>
