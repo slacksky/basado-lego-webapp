@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/css/main.css" rel="stylesheet">
+  <title>Lego Collection</title>
+</head>
+<body class="bg-base-100">
+  
+  <!-- Navbar Partial -->
+  <%- include('partials/navbar', { page: '/lego/sets', theme: theme }) %>
+
+  <!-- Collection Section -->
+  <div class="collection min-h-screen bg-base-200">
+    <div class="collection text-center">
+      <div class="max-w-md">
+        <h1 class="text-5xl font-bold">Lego Collection</h1>
+        <p class="py-6">Browse through the amazing Lego sets!</p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Sets Table -->
+  <div class="container mx-auto my-8">
+    <table class="table-auto w-full text-center">
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Name</th>
+          <th>Theme</th>
+          <th>Year</th>
+          <th>Parts</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% sets.forEach(set => { %>
+          <tr>
+            <!-- Image Column -->
+            <td><img src="<%= set.img_url %>" alt="<%= set.name %>" class="avatar w-16 h-16 rounded-full"></td>
+
+            <!-- Name Column -->
+            <td><%= set.name %></td>
+
+            <!-- Theme Column with Link -->
+            <td>
+              <a href="/lego/sets?theme=<%= set.theme.toLowerCase() %>" class="btn btn-outline"><%= set.theme %></a>
+            </td>
+
+            <!-- Year Column -->
+            <td><%= set.year %></td>
+
+            <!-- Parts Column -->
+            <td><%= set.num_parts %></td>
+
+            <!-- Details Column with Link -->
+            <td>
+              <a href="/lego/sets/<%= set.set_num %>" class="btn btn-primary">Details</a>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

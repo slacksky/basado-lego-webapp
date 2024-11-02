@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/css/main.css" rel="stylesheet">
+  <title><%= set.name %> - Lego Collection</title>
+</head>
+<body class="bg-base-100">
+  <!-- Navbar Partial -->
+  <%- include('partials/navbar', { page: '/lego/sets', theme: set.theme }) %>
+
+  <div class="container mx-auto my-8">
+    <h1 class="text-4xl font-bold"><%= set.name %></h1>
+    <p><strong>Theme:</strong> <%= set.theme %></p>
+    <p><strong>Year:</strong> <%= set.year %></p>
+    <p><strong>Number of Parts:</strong> <%= set.num_parts %></p>
+    <img src="<%= set.img_url %>" alt="<%= set.name %>" class="rounded-lg shadow-lg mb-4">
+    <a href="/lego/sets" class="btn btn-primary">Back to Collection</a>
+  </div>
+</body>
+</html>

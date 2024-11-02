@@ -51,39 +51,88 @@ app.get("/about", (req, res) => {
 
 
 
+//old version of the lego sets
+
+// app.get('/lego/sets', (req, res) => {
+//   console.log('Received request for /lego/sets');
+//   const theme = req.query.theme;
+//   console.log('Theme query parameter:', theme);
+
+//   if (theme) {
+//     legoData.getSetsByTheme(theme)
+//       .then(sets => {
+//         console.log('Filtered sets by theme:', sets);
+//         if (sets.length > 0) {
+//           res.json(sets);
+//         } else {
+//           console.log(`No sets found for theme: ${theme}`);
+//           res.status(404).send({ message: `No sets found for theme: ${theme}` });
+//         }
+//       })
+//       .catch(err => {
+//         console.error('Error fetching sets by theme:', err);
+//         res.status(500).send({ message: 'Server error while fetching sets by theme' });
+//       });
+//   } else {
+//     legoData.getAllSets()
+//       .then(sets => {
+//         console.log('All sets:', sets);
+//         res.json(sets);
+//       })
+//       .catch(err => {
+//         console.error('Error fetching all sets:', err);
+//         res.status(500).send({ message: 'Server error while fetching all sets' });
+//       });
+//   }
+// });
+
+// app.get('/lego/sets/:id', (req, res) => {
+//   const setId = req.params.id;
+//   console.log('Received request for set ID:', setId);
+
+//   legoData.getSetByNum(setId)
+//     .then(set => {
+//       if (set) {
+//         console.log('Found set:', set);
+//         res.json(set);
+//       } else {
+//         console.log(`Set with ID: ${setId} not found`);
+//         res.status(404).send({ message: `Set with ID: ${setId} not found` });
+//       }
+//     })
+//     .catch(err => {
+//       console.error(`Error fetching set with ID ${setId}:`, err);
+//       res.status(500).send({ message: 'Server error while fetching the set' });
+//     });
+// });
 
 app.get('/lego/sets', (req, res) => {
-  console.log('Received request for /lego/sets');
   const theme = req.query.theme;
   console.log('Theme query parameter:', theme);
 
   if (theme) {
     legoData.getSetsByTheme(theme)
       .then(sets => {
-        console.log('Filtered sets by theme:', sets);
         if (sets.length > 0) {
-          res.json(sets);
+          res.render('sets', { sets, theme });  // Pass both sets and theme to the view
         } else {
-          console.log(`No sets found for theme: ${theme}`);
-          res.status(404).send({ message: `No sets found for theme: ${theme}` });
+          res.status(404).render('404', { message: `No sets found for theme: ${theme}` });
         }
       })
       .catch(err => {
-        console.error('Error fetching sets by theme:', err);
-        res.status(500).send({ message: 'Server error while fetching sets by theme' });
+        res.status(500).render('error', { message: 'Server error while fetching sets by theme' });
       });
   } else {
     legoData.getAllSets()
       .then(sets => {
-        console.log('All sets:', sets);
-        res.json(sets);
+        res.render('sets', { sets, theme: '' });  // Pass theme as an empty string when no theme is selected
       })
       .catch(err => {
-        console.error('Error fetching all sets:', err);
-        res.status(500).send({ message: 'Server error while fetching all sets' });
+        res.status(500).render('error', { message: 'Server error while fetching all sets' });
       });
   }
 });
+
 
 app.get('/lego/sets/:id', (req, res) => {
   const setId = req.params.id;
@@ -93,15 +142,15 @@ app.get('/lego/sets/:id', (req, res) => {
     .then(set => {
       if (set) {
         console.log('Found set:', set);
-        res.json(set);
+        res.render('set', { set });  // Render the 'set.ejs' view with the set data
       } else {
         console.log(`Set with ID: ${setId} not found`);
-        res.status(404).send({ message: `Set with ID: ${setId} not found` });
+        res.status(404).render('404', { message: `Set with ID: ${setId} not found` });
       }
     })
     .catch(err => {
       console.error(`Error fetching set with ID ${setId}:`, err);
-      res.status(500).send({ message: 'Server error while fetching the set' });
+      res.status(500).render('error', { message: 'Server error while fetching the set' });
     });
 });
 
