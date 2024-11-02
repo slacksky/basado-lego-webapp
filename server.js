@@ -21,8 +21,8 @@ const app = express();
 const PORT = process.env.PORT || 3000; // port by env var?
 //const PORT = 3000;
 //app.set("view engine", "ejs");// ejs as the viewing engine
-app.set("views", path.join(__dirname, "views"));//adapting to vercel?
-
+//app.set("views", path.join(__dirname, "views"));//adapting to vercel?
+app.set('views', __dirname + '/views');
 
 
 // Middleware to serve static files from the "public" folder
