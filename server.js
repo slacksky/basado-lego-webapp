@@ -1,16 +1,20 @@
 /********************************************************************************
-*  WEB322 – Assignment 04
+*  WEB322 – Assignment 05
 * 
 *  I declare that this assignment is my own work in accordance with Seneca's
 *  Academic Integrity Policy:
 * 
 *  https://www.senecacollege.ca/about/policies/academic-integrity-policy.html
 * 
-*  Name: Jorge Luis Vivas Castellanos Student ID: 1126255291 Date: 01Nov24
+*  Name: Jorge Luis Vivas Castellanos Student ID: 1126255291 Date: 11Nov24
 *
-*  Published URL: https://basado-lego-webapp-cld7-p3u833kcc-jorge-vivas-projects-b5e9873b.vercel.app/
+*  Published URL: 
 *
 ********************************************************************************/
+//.env and squelice lib load
+require('dotenv').config();
+const { DB_USER, DB_PASSWORD, DB_DATABASE, DB_HOST } = process.env;
+const Sequelize = require('sequelize');
 
 
 const express = require("express");
@@ -20,11 +24,60 @@ const legoData = require("./modules/legoSets");
 const app = express();
 const PORT = process.env.PORT || 3000; // port by env var?
 //const PORT = 3000;
+
+//db setup
+let sequelize = new Sequelize(DB_DATABASE, DB_USER, DB_PASSWORD, {
+  host: DB_HOST,
+  dialect: 'postgres',
+});// based on instruction of the pdf if err change back to const
+
+// Theme model Definition
+const Theme = sequelize.define('Theme', {
+  id: {
+    type: Sequelize.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  name: {
+    type: Sequelize.STRING,
+  }
+}, {
+  timestamps: false, // This Disables createdAt and updatedAt fields
+});
+
+// Set model Definition
+const Set = sequelize.define('Set', {
+  set_num: {
+    type: Sequelize.STRING,
+    primaryKey: true,
+  },
+  name: {
+    type: Sequelize.STRING,
+  },
+  year: {
+    type: Sequelize.INTEGER,
+  },
+  num_parts: {
+    type: Sequelize.INTEGER,
+  },
+  theme_id: {
+    type: Sequelize.INTEGER,
+  },
+  img_url: {
+    type: Sequelize.STRING,
+  }
+}, {
+  timestamps: false, // Again Disabling createdAt and updatedAt fields
+});
+
+// Define associations
+Theme.hasMany(Set, { foreignKey: 'theme_id' });
+Set.belongsTo(Theme, { foreignKey: 'theme_id' });
+
+//Middle ware grouping def
 app.set("view engine", "ejs");// ejs as the viewing engine
 //app.set("views", path.join(__dirname, "views"));//adapting to vercel?
 app.set('views', path.join(__dirname, 'views'));
-
-
 // Middleware to serve static files from the "public" folder
 app.use(express.static(path.join(__dirname, "public")));
 
