@@ -1,13 +1,14 @@
 require('dotenv').config();
-const setData = require("../data/setData");
-const themeData = require("../data/themeData");
+// const setData = require("../data/setData");
+// const themeData = require("../data/themeData");
 const Sequelize = require('sequelize');
 
-let sets = [];
-const themeLookup = themeData.reduce((lookup, theme) => {
-    lookup[theme.id] = theme.name;
-    return lookup;
-}, {});
+//tentative removal 
+ let sets = [];
+// const themeLookup = themeData.reduce((lookup, theme) => {
+//     lookup[theme.id] = theme.name;
+//     return lookup;
+// }, {});
 
 /* start of sequelize config section*/
 
@@ -75,36 +76,50 @@ Set.belongsTo(Theme, { foreignKey: 'theme_id' });
 
 function initialize() {
     return new Promise((resolve, reject) => {
-        try {
-            sets = [];
-            setData.forEach(set => {
-                sets.push({ ...set, theme: themeLookup[set.theme_id] || "Unknown" });
-            });
-            resolve();
-        } catch (error) {
-            reject(`Error initializing data: ${error.message}`);
-        }
+        sequelize
+            .sync()
+            .then(() => resolve())
+            .catch((err) => reject(`Unable to sync database: ${err.message}`));
     });
 }
 
 function getAllSets() {
     return new Promise((resolve, reject) => {
-        sets.length > 0 ? resolve(sets) : reject("No sets available.");
+        Set.findAll({ include: [Theme] }) // Fetch all sets with theme data
+        .then((sets) => resolve(sets))
+        .catch((err) => reject(`Error fetching sets: ${err.message}`));
     });
 }
 
 function getSetByNum(setNum) {
     return new Promise((resolve, reject) => {
-        const foundSet = sets.find(set => set.set_num === setNum);
-        foundSet ? resolve(foundSet) : reject(`Set ${setNum} not found.`);
+        Set.findOne({ 
+            where: { set_num: setNum }, // Filter by set_num
+            include: [Theme] // Include theme data
+        })
+        .then((set) => {
+            if (set) resolve(set);
+            else reject(`Set ${setNum} not found.`);
+        })
+        .catch((err) => reject(`Error fetching set: ${err.message}`));
     });
 }
 
 function getSetsByTheme(theme) {
     return new Promise((resolve, reject) => {
-        const regex = new RegExp(theme, 'i');
-        const filteredSets = sets.filter(set => regex.test(set.theme));
-        filteredSets.length > 0 ? resolve(filteredSets) : reject(`No sets found for theme: ${theme}`);
+        Set.findAll({
+            include: [Theme], // Include theme data
+            where: {
+                '$Theme.name$': { // Access the Theme name
+                    [Sequelize.Op.iLike]: `%${theme}%` // Case-insensitive match
+                }
+            }
+        })
+        .then((sets) => {
+            if (sets.length > 0) resolve(sets);
+            else reject(`No sets found for theme: ${theme}`);
+        })
+        .catch((err) => reject(`Error fetching sets by theme: ${err.message}`));
     });
 }
 
@@ -116,23 +131,26 @@ module.exports = {
 };
 
 
-sequelize
-    .sync()
-    .then(async () => {
-        try {
-            await Theme.bulkCreate(themeData); // Insert themes
-            await Set.bulkCreate(setData); // Insert sets
-            console.log("-----");
-            console.log("data inserted successfully");
-        } catch (err) {
-            console.log("-----");
-            console.log(err.message);
-        }
-        process.exit();
-    })
-    .catch((err) => {
-        console.log('Unable to connect to the database:', err);
-    });
+
+//removal of the bulk insert
+
+// sequelize
+//     .sync()
+//     .then(async () => {
+//         try {
+//             await Theme.bulkCreate(themeData); // Insert themes
+//             await Set.bulkCreate(setData); // Insert sets
+//             console.log("-----");
+//             console.log("data inserted successfully");
+//         } catch (err) {
+//             console.log("-----");
+//             console.log(err.message);
+//         }
+//         process.exit();
+//     })
+//     .catch((err) => {
+//         console.log('Unable to connect to the database:', err);
+//     });
 
 
 // Test block for the functions
