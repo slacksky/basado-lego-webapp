@@ -87,7 +87,7 @@ function getAllSets() {
     return new Promise((resolve, reject) => {
         Set.findAll({ include: [Theme] }) // Fetch all sets with theme data
         .then((sets) => resolve(sets))
-        .catch((err) => reject(`Error fetching sets: ${err.message}`));
+        .catch((err) => reject(`Unable to find requested sets Error fetching: ${err.message}`));
     });
 }
 
@@ -101,7 +101,7 @@ function getSetByNum(setNum) {
             if (set) resolve(set);
             else reject(`Set ${setNum} not found.`);
         })
-        .catch((err) => reject(`Error fetching set: ${err.message}`));
+        .catch((err) => reject(`Unable to find requested set Error fetching: ${err.message}`));
     });
 }
 
@@ -119,7 +119,7 @@ function getSetsByTheme(theme) {
             if (sets.length > 0) resolve(sets);
             else reject(`No sets found for theme: ${theme}`);
         })
-        .catch((err) => reject(`Error fetching sets by theme: ${err.message}`));
+        .catch((err) => reject(`Unable to find requested sets Error fetching by theme: ${err.message}`));
     });
 }
 
