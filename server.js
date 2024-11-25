@@ -135,7 +135,17 @@ app.post('/lego/addSet', (req, res) => {
     });
 });
 
+//Qtest
+app.get('/test-500', (req, res) => {
+  throw new Error("This is a test server error!");
+});
 
+
+// Handling of server errors (500)
+app.use((err, req, res, next) => {
+  console.error(err.stack); // Log the error for debugging
+  res.status(500).render('500', { message: "Infinte in mistery are the gift of the goddess and the source of this error." });
+});
 
 
 // Addition serve the 404 page case
