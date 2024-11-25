@@ -83,13 +83,37 @@ function initialize() {
     });
 }
 
+// function getAllSets() {
+//     return new Promise((resolve, reject) => {
+//         Set.findAll({ include: [Theme] }) // Fetch all sets with theme data
+//         .then((sets) => resolve(sets))
+//         .catch((err) => reject(`Unable to find requested sets Error fetching: ${err.message}`));
+//     });
+// }
+// function getAllSets() {
+//     return new Promise((resolve, reject) => {
+//         Set.findAll({ include: [Theme] }) // Fetch all sets with theme data
+//         .then((sets) => {
+//             console.log(JSON.stringify(sets, null, 2)); // Log the fetched sets
+//             resolve(sets);
+//         })
+//         .catch((err) => reject(`Unable to find requested sets. Error fetching: ${err.message}`));
+//     });
+// }
+
 function getAllSets() {
-    return new Promise((resolve, reject) => {
-        Set.findAll({ include: [Theme] }) // Fetch all sets with theme data
-        .then((sets) => resolve(sets))
-        .catch((err) => reject(`Unable to find requested sets Error fetching: ${err.message}`));
-    });
+    return Set.findAll({ include: [Theme] })
+        .then((sets) => {
+            if (sets.length === 0) throw new Error("No sets found.");
+            return sets;
+        })
+        .catch((err) => {
+            throw new Error(`Error: ${err.message}`);
+        });
 }
+
+
+
 
 function getSetByNum(setNum) {
     return new Promise((resolve, reject) => {
