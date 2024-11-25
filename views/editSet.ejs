@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="cupcake">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/css/main.css" rel="stylesheet">
+  <title>Edit Set - <%= set.name %></title>
+</head>
+<body class="bg-base-100">
+  <!-- Navbar Partial -->
+  <%- include('partials/navbar', { page: '' }) %>
+
+  <!-- Edit Set Hero Section -->
+  <div class="hero min-h-screen bg-base-200">
+    <div class="hero-content flex-col lg:flex-row-reverse">
+      <div class="text-center lg:text-left">
+        <h1 class="text-5xl font-bold">Edit Set: <%= set.name %></h1>
+        <p class="py-6">Update the details for this Lego set.</p>
+      </div>
+      <div class="card w-full max-w-sm shadow-2xl bg-base-100">
+        <form action="/lego/editSet" method="POST" class="card-body">
+          <!-- Set Number (Read-only) -->
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Set Number</span>
+            </label>
+            <input 
+              type="text" 
+              name="set_num" 
+              value="<%= set.set_num %>" 
+              class="input input-bordered cursor-not-allowed" 
+              readonly>
+          </div>
+          
+          <!-- Set Name -->
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Set Name</span>
+            </label>
+            <input 
+              type="text" 
+              name="name" 
+              value="<%= set.name %>" 
+              class="input input-bordered" 
+              required>
+          </div>
+          
+          <!-- Year -->
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Year</span>
+            </label>
+            <input 
+              type="number" 
+              name="year" 
+              value="<%= set.year %>" 
+              class="input input-bordered" 
+              required>
+          </div>
+          
+          <!-- Theme Selection -->
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Theme</span>
+            </label>
+            <select 
+              name="theme_id" 
+              class="select select-bordered" 
+              required>
+              <% themes.forEach(theme => { %>
+                <option 
+                  value="<%= theme.id %>" 
+                  <%= (set.theme_id == theme.id) ? "selected" : "" %>>
+                  <%= theme.name %>
+                </option>
+              <% }) %>
+            </select>
+          </div>
+          
+          <!-- Submit Button -->
+          <div class="form-control mt-6">
+            <button type="submit" class="btn btn-primary">Update Set</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

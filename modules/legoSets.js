@@ -115,19 +115,35 @@ function getAllSets() {
 
 
 
-function getSetByNum(setNum) {
+// function getSetByNum(setNum) {
+//     return new Promise((resolve, reject) => {
+//         Set.findOne({ 
+//             where: { set_num: setNum }, // Filter by set_num
+//             include: [Theme] // Include theme data
+//         })
+//         .then((set) => {
+//             if (set) resolve(set);
+//             else reject(`Set ${setNum} not found.`);
+//         })
+//         .catch((err) => reject(`Unable to find requested set Error fetching: ${err.message}`));
+//     });
+// }
+//review theme data no included?
+const getSetByNum = (setNum) => {
     return new Promise((resolve, reject) => {
-        Set.findOne({ 
-            where: { set_num: setNum }, // Filter by set_num
-            include: [Theme] // Include theme data
-        })
+      Set.findOne({ where: { set_num: setNum } })
         .then((set) => {
-            if (set) resolve(set);
-            else reject(`Set ${setNum} not found.`);
+          if (set) {
+            resolve(set);
+          } else {
+            reject(new Error(`Set with number ${setNum} not found.`));
+          }
         })
-        .catch((err) => reject(`Unable to find requested set Error fetching: ${err.message}`));
+        .catch((err) => reject(err));
     });
-}
+  };
+  
+
 
 function getSetsByTheme(theme) {
     return new Promise((resolve, reject) => {
@@ -168,7 +184,29 @@ function getAllThemes() {
         });
 }
 
-
+const editSet = (set_num, setData) => {
+    return new Promise((resolve, reject) => {
+      // Use Sequelize's update method to modify the set
+      Set.update(setData, { where: { set_num: set_num } })
+        .then(([affectedRows]) => {
+          if (affectedRows === 0) {
+            // No rows were updated, likely because the set was not found
+            reject(new Error(`Set with number ${set_num} not found or no changes were made.`));
+          } else {
+            // Successfully updated
+            resolve();
+          }
+        })
+        .catch((err) => {
+          // If there is an error, reject with the first error message
+          if (err.errors && err.errors.length > 0) {
+            reject(new Error(err.errors[0].message));
+          } else {
+            reject(err);
+          }
+        });
+    });
+  };
 
 module.exports = {
     initialize,
@@ -176,7 +214,8 @@ module.exports = {
     getSetByNum,
     getSetsByTheme,
     getAllThemes,
-    createSet     
+    createSet,
+    editSet     
 };
 
 

@@ -35,6 +35,10 @@
           <p><strong>Theme:</strong> <%= set.Theme.name %></p>
           <p><strong>Year Released:</strong> <%= set.year %></p>
           <p><strong>Number of Parts:</strong> <%= set.num_parts %></p>
+          
+          <!-- Edit Button -->
+          <a href="/lego/editSet/<%= set.set_num %>" class="btn btn-success mt-4">Edit Set</a>
+          
           <button onclick="history.back(); return false;" class="btn btn-secondary mt-4">Back</button>
         </div>
       </div>
@@ -48,7 +52,7 @@
     <p id="author" class="text-gray-600">-</p>
   </div>
 
- <!-- Script to fetch and display the quote -->
+  <!-- Script to fetch and display the quote -->
 <script>
     document.addEventListener("DOMContentLoaded", () => {
       fetch("https://quotable.io/random")

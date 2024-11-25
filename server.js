@@ -8,7 +8,7 @@
 * 
 *  Name: Jorge Luis Vivas Castellanos Student ID: 1126255291 Date: 11Nov24
 *
-*  Published URL: 
+*  Published URL: https://basado-lego-webapp-cld7.vercel.app/
 *
 ********************************************************************************/
 const express = require("express");
@@ -135,10 +135,46 @@ app.post('/lego/addSet', (req, res) => {
     });
 });
 
-//Qtest
-app.get('/test-500', (req, res) => {
-  throw new Error("This is a test server error!");
+//Edit Section
+
+app.get('/lego/editSet/:num', async (req, res) => {
+  const setNum = req.params.num;
+
+  try {
+    // Retrieve the specific set and all themes
+    const setData = await getSetByNum(setNum);
+    const themeData = await getAllThemes();
+
+    // Render the editSet view with the data
+    res.render('editSet', { themes: themeData, set: setData });
+  } catch (err) {
+    // If there's an error, render the 404 view with an appropriate message
+    res.status(404).render('404', { message: err.message || 'Set or themes not found.' });
+  }
 });
+
+app.post('/lego/editSet', async (req, res) => {
+  const setNum = req.body.set_num; // The primary key is read-only
+  const setData = req.body; // Contains the updated set data
+
+  try {
+    // Attempt to update the set
+    await editSet(setNum, setData);
+
+    // On success, redirect to the list of sets
+    res.redirect('/lego/sets');
+  } catch (err) {
+    // If there's an error, render the 500 view with an appropriate message
+    res.render('500', { message: `I'm sorry, but we have encountered the following error: ${err.message}` });
+  }
+});
+
+
+
+// //Qtest
+// app.get('/test-500', (req, res) => {
+//   throw new Error("This is a test server error!");
+// });
 
 
 // Handling of server errors (500)
