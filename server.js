@@ -28,6 +28,7 @@ app.set('views', path.join(__dirname, 'views'));
 // Middleware to serve static files from the "public" folder
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use(express.urlencoded({ extended: true })); // Parse URL-encoded form data
 
 
 
@@ -105,37 +106,19 @@ app.get('/lego/sets/:id', (req, res) => {
 
 //addSet section
 app.get('/lego/addSet', (req, res) => {
-  legoData.getAllThemes()  
+  legoData.getAllThemes() // Fetch all themes from the database
     .then(themes => {
-      res.render('addSet', { themes });  
+      res.render('addSet', { themes }); // Pass themes to the view
     })
     .catch(err => {
-      res.status(500).render('error', { message: 'Error fetching themes' });
+      res.status(500).render('error', { message: 'Error loading themes' });
     });
 });
 
-// app.post('/lego/addSet', (req, res) => {
-
-//   const { set_num, name, year, num_parts, img_url, theme_id } = req.body;
-
-//   legoSets.createSet({ set_num, name, year, num_parts, img_url, theme_id })
-//       .then(() => {
-//           res.redirect('/lego/sets');
-//       })
-//       .catch((err) => {
-//           res.render("500", { message: `I'm sorry, but we have encountered the following: ${err.message}` });
-//       });
-// });
 app.post('/lego/addSet', (req, res) => {
-  const { name, year, num_parts, img_url, theme_id, set_num } = req.body;
-
-  // Check if all fields are provided
-  if (!name || !year || !num_parts || !img_url || !theme_id || !set_num) {
-    return res.status(400).render('error', { message: 'Please fill in all fields' });
-  }
-
-  // Create a new Lego set in the database
-  legoData.addSet({
+  const { name, year, num_parts, img_url, theme_id, set_num } = req.body; // Extract form data
+  
+  legoData.createSet({
     name,
     year,
     num_parts,
@@ -143,12 +126,13 @@ app.post('/lego/addSet', (req, res) => {
     theme_id,
     set_num
   })
-  .then(() => {
-    res.redirect('/lego/sets');  // Redirect to the Lego sets page after adding
-  })
-  .catch(err => {
-    res.status(500).render('error', { message: 'Error adding new set' });
-  });
+    .then(() => {
+      res.redirect('/lego/sets'); // Redirect to the sets page after successful creation
+    })
+    .catch(err => {
+      console.error('Error adding set:', err);
+      res.status(500).render('error', { message: 'Error adding set' });
+    });
 });
 
 
