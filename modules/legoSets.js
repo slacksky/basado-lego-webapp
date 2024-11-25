@@ -83,13 +83,13 @@ function initialize() {
     });
 }
 
-// function getAllSets() {
-//     return new Promise((resolve, reject) => {
-//         Set.findAll({ include: [Theme] }) // Fetch all sets with theme data
-//         .then((sets) => resolve(sets))
-//         .catch((err) => reject(`Unable to find requested sets Error fetching: ${err.message}`));
-//     });
-// }
+function getAllSets() {
+    return new Promise((resolve, reject) => {
+        Set.findAll({ include: [Theme] }) // Fetch all sets with theme data
+        .then((sets) => resolve(sets))
+        .catch((err) => reject(`Unable to find requested sets Error fetching: ${err.message}`));
+    });
+}
 // function getAllSets() {
 //     return new Promise((resolve, reject) => {
 //         Set.findAll({ include: [Theme] }) // Fetch all sets with theme data
@@ -101,16 +101,16 @@ function initialize() {
 //     });
 // }
 
-function getAllSets() {
-    return Set.findAll({ include: [Theme] })
-        .then((sets) => {
-            if (sets.length === 0) throw new Error("No sets found.");
-            return sets;
-        })
-        .catch((err) => {
-            throw new Error(`Error: ${err.message}`);
-        });
-}
+// function getAllSets() {
+//     return Set.findAll({ include: [Theme] })
+//         .then((sets) => {
+//             if (sets.length === 0) throw new Error("No sets found.");
+//             return sets;
+//         })
+//         .catch((err) => {
+//             throw new Error(`Error: ${err.message}`);
+//         });
+// }
 
 
 
@@ -147,11 +147,34 @@ function getSetsByTheme(theme) {
     });
 }
 
+function getAllThemes() {
+    return Theme.findAll()
+        .then((themes) => {
+            if (themes.length === 0) throw new Error("No themes found.");S
+            return themes;
+        })
+        .catch((err) => {
+            throw new Error(`Unable to fetch themes: ${err.message}`);
+        });
+}
+
+//test
+function addSet(setData) {
+    return new Promise((resolve, reject) => {
+      Set.create(setData)  // Assuming you're using Sequelize ORM
+        .then(() => resolve())
+        .catch(err => reject(err));
+    });
+  }
+
 module.exports = {
     initialize,
     getAllSets,
     getSetByNum,
-    getSetsByTheme
+    getSetsByTheme,
+    getAllThemes, 
+    addSet
+    
 };
 
 

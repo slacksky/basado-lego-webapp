@@ -12,19 +12,24 @@
 *
 ********************************************************************************/
 const express = require("express");
-const path = require("path"); //config for the path review, vailidty and use then uncomment
-const legoData = require("./modules/legoSets");
 
 const app = express();
-const PORT = process.env.PORT || 3000; // port by env var?
-//const PORT = 3000;
+
 app.set("view engine", "ejs");// ejs as the viewing engine
-//app.set("views", path.join(__dirname, "views"));//adapting to vercel?
+
+const PORT = process.env.PORT || 8181; 
+const path = require("path"); //config for the path review, vailidty and use then uncomment
+
+const legoData = require("./modules/legoSets");
+
 app.set('views', path.join(__dirname, 'views'));
 
 
 // Middleware to serve static files from the "public" folder
 app.use(express.static(path.join(__dirname, "public")));
+
+
+
 
 legoData.initialize()
   .then(() => {
@@ -97,6 +102,55 @@ app.get('/lego/sets/:id', (req, res) => {
       res.status(500).render('500', { message: 'Server error while fetching the set' });
     });
 });
+
+//addSet section
+app.get('/lego/addSet', (req, res) => {
+  legoData.getAllThemes()  
+    .then(themes => {
+      res.render('addSet', { themes });  
+    })
+    .catch(err => {
+      res.status(500).render('error', { message: 'Error fetching themes' });
+    });
+});
+
+// app.post('/lego/addSet', (req, res) => {
+
+//   const { set_num, name, year, num_parts, img_url, theme_id } = req.body;
+
+//   legoSets.createSet({ set_num, name, year, num_parts, img_url, theme_id })
+//       .then(() => {
+//           res.redirect('/lego/sets');
+//       })
+//       .catch((err) => {
+//           res.render("500", { message: `I'm sorry, but we have encountered the following: ${err.message}` });
+//       });
+// });
+app.post('/lego/addSet', (req, res) => {
+  const { name, year, num_parts, img_url, theme_id, set_num } = req.body;
+
+  // Check if all fields are provided
+  if (!name || !year || !num_parts || !img_url || !theme_id || !set_num) {
+    return res.status(400).render('error', { message: 'Please fill in all fields' });
+  }
+
+  // Create a new Lego set in the database
+  legoData.addSet({
+    name,
+    year,
+    num_parts,
+    img_url,
+    theme_id,
+    set_num
+  })
+  .then(() => {
+    res.redirect('/lego/sets');  // Redirect to the Lego sets page after adding
+  })
+  .catch(err => {
+    res.status(500).render('error', { message: 'Error adding new set' });
+  });
+});
+
 
 
 

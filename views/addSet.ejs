@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="cupcake">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/css/main.css" rel="stylesheet">
+  <title>Add New Set</title>
+</head>
+<body class="bg-base-100">
+  
+  <!-- Navbar Partial -->
+  <%- include('partials/navbar', { page: '/lego/addSet' }) %>
+
+  <!-- Hero Section -->
+  <%- include('partials/collections', {
+    title: 'Add New Lego Set',
+    description: 'Fill out the form below to add a new Lego set to the collection.',
+    buttonLink: '/lego/sets',
+    buttonText: 'Back to Collection'
+  }) %>
+
+  <!-- Add Set Form -->
+  <div class="container mx-auto my-8">
+    <form action="/lego/addSet" method="POST" class="w-full max-w-lg mx-auto space-y-4">
+      
+      <!-- Name -->
+      <div>
+        <label for="name" class="block text-lg font-medium">Set Name</label>
+        <input type="text" id="name" name="name" class="input input-bordered w-full" required>
+      </div>
+
+      <!-- Year -->
+      <div>
+        <label for="year" class="block text-lg font-medium">Year</label>
+        <input type="number" id="year" name="year" class="input input-bordered w-full" required>
+      </div>
+
+      <!-- Number of Parts -->
+      <div>
+        <label for="num_parts" class="block text-lg font-medium">Number of Parts</label>
+        <input type="number" id="num_parts" name="num_parts" class="input input-bordered w-full" required>
+      </div>
+
+      <!-- Image URL -->
+      <div>
+        <label for="img_url" class="block text-lg font-medium">Image URL</label>
+        <input type="url" id="img_url" name="img_url" class="input input-bordered w-full" required>
+      </div>
+
+      <!-- Theme -->
+      <div>
+        <label for="theme_id" class="block text-lg font-medium">Theme</label>
+        <select id="theme_id" name="theme_id" class="select select-bordered w-full" required>
+          <%- themes.forEach(theme => { %>
+            <option value="<%= theme.id %>"><%= theme.name %></option>
+          <% }) %>
+        </select>
+      </div>
+
+      <!-- Set Number -->
+      <div>
+        <label for="set_num" class="block text-lg font-medium">Set Number</label>
+        <input type="text" id="set_num" name="set_num" class="input input-bordered w-full" required>
+      </div>
+
+      <!-- Submit Button -->
+      <div>
+        <button type="submit" class="btn btn-primary w-full">Add Set</button>
+      </div>
+
+    </form>
+  </div>
+  
+</body>
+</html>
