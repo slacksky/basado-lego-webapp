@@ -6,6 +6,7 @@ const Sequelize = require('sequelize');
 let sequelize = new Sequelize(process.env.DB_DATABASE, process.env.DB_USER, process.env.DB_PASSWORD, {
   host: process.env.DB_HOST,
   dialect: 'postgres',
+  dialectModule: require('pg'),//99 problems is vercel one?
   port: 5432,
   dialectOptions: {
     ssl: { rejectUnauthorized: false },
