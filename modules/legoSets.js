@@ -20,6 +20,7 @@ let sequelize = new Sequelize(
     {
         host: process.env.DB_HOST, // Hostname
         dialect: 'postgres',       // Database dialect
+        dialectModule: require('pg'),//99 problems is vercel one?
         dialectOptions: {
             ssl: {
                 require: true,      // Enforce SSL connection
