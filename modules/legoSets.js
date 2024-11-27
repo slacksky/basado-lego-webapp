@@ -1,35 +1,17 @@
 require('dotenv').config();
-// const setData = require("../data/setData");
-// const themeData = require("../data/themeData");
+
 const Sequelize = require('sequelize');
 
-//tentative removal 
- let sets = [];
-// const themeLookup = themeData.reduce((lookup, theme) => {
-//     lookup[theme.id] = theme.name;
-//     return lookup;
-// }, {});
+//set up sequelize to point to our postgres database
+let sequelize = new Sequelize(process.env.DB_DATABASE, process.env.DB_USER, process.env.DB_PASSWORD, {
+  host: process.env.DB_HOST,
+  dialect: 'postgres',
+  port: 5432,
+  dialectOptions: {
+    ssl: { rejectUnauthorized: false },
+  }
+});
 
-/* start of sequelize config section*/
-
-// Create Sequelize connection
-let sequelize = new Sequelize(
-    process.env.DB_DATABASE, // Database name
-    process.env.DB_USER,     // Username
-    process.env.DB_PASSWORD, // Password
-    {
-        host: process.env.DB_HOST, // Hostname
-        dialect: 'postgres',       // Database dialect
-        dialectModule: require('pg'),//99 problems is vercel one?
-        dialectOptions: {
-            ssl: {
-                require: true,      // Enforce SSL connection
-                rejectUnauthorized: false // Accept self-signed certificates
-            }
-        },
-        logging: false // Optional: Disable logging for cleaner output
-    }
-);
 
 // Define the Theme model
 const Theme = sequelize.define('Theme', {
