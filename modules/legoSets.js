@@ -129,20 +129,36 @@ function getAllSets() {
 //     });
 // }
 //review theme data no included?
-const getSetByNum = (setNum) => {
-    return new Promise((resolve, reject) => {
-      Set.findOne({ where: { set_num: setNum } })
-        .then((set) => {
-          if (set) {
-            resolve(set);
-          } else {
-            reject(new Error(`Set with number ${setNum} not found.`));
-          }
-        })
-        .catch((err) => reject(err));
-    });
-  };
+// const getSetByNum = (setNum) => {
+//     return new Promise((resolve, reject) => {
+//       Set.findOne({ where: { set_num: setNum } })
+//         .then((set) => {
+//           if (set) {
+//             resolve(set);
+//           } else {
+//             reject(new Error(`Set with number ${setNum} not found.`));
+//           }
+//         })
+//         .catch((err) => reject(err));
+//     });
+//   };
   
+const getSetByNum = (setNum) => {
+    return Set.findOne({ 
+        where: { set_num: setNum },
+        include: [Theme], // Include the associated Theme model
+    })
+    .then((set) => {
+        if (set) {
+            return set;
+        } else {
+            throw new Error(`Set with number ${setNum} not found.`);
+        }
+    })
+    .catch((err) => {
+        throw new Error(err.message);
+    });
+};
 
 
 function getSetsByTheme(theme) {
@@ -184,29 +200,44 @@ function getAllThemes() {
         });
 }
 
-const editSet = (set_num, setData) => {
-    return new Promise((resolve, reject) => {
-      // Use Sequelize's update method to modify the set
-      Set.update(setData, { where: { set_num: set_num } })
-        .then(([affectedRows]) => {
-          if (affectedRows === 0) {
-            // No rows were updated, likely because the set was not found
-            reject(new Error(`Set with number ${set_num} not found or no changes were made.`));
-          } else {
-            // Successfully updated
-            resolve();
-          }
+// const editSet = (set_num, setData) => {
+//     return new Promise((resolve, reject) => {
+//       // Use Sequelize's update method to modify the set
+//       Set.update(setData, { where: { set_num: set_num } })
+//         .then(([affectedRows]) => {
+//           if (affectedRows === 0) {
+//             // No rows were updated, likely because the set was not found
+//             reject(new Error(`Set with number ${set_num} not found or no changes were made.`));
+//           } else {
+//             // Successfully updated
+//             resolve();
+//           }
+//         })
+//         .catch((err) => {
+//           // If there is an error, reject with the first error message
+//           if (err.errors && err.errors.length > 0) {
+//             reject(new Error(err.errors[0].message));
+//           } else {
+//             reject(err);
+//           }
+//         });
+//     });
+//   };
+function editSet(set_num, setData) {
+    return Set.update(setData, {
+        where: { set_num: set_num },
+    })
+        .then((updatedRows) => {
+            if (updatedRows[0] === 0) {
+                throw new Error(`Set with set_num ${set_num} not found.`);
+            }
+            return;
         })
         .catch((err) => {
-          // If there is an error, reject with the first error message
-          if (err.errors && err.errors.length > 0) {
-            reject(new Error(err.errors[0].message));
-          } else {
-            reject(err);
-          }
+            throw new Error(err.errors ? err.errors[0].message : err.message);
         });
-    });
-  };
+}
+
 
 module.exports = {
     initialize,

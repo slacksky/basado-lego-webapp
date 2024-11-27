@@ -135,39 +135,109 @@ app.post('/lego/addSet', (req, res) => {
     });
 });
 
-//Edit Section
+//Edit Section reference 
 
-app.get('/lego/editSet/:num', async (req, res) => {
-  const setNum = req.params.num;
+app.get("/lego/editSet/:num", async (req, res) => {
 
   try {
-    // Retrieve the specific set and all themes
-    const setData = await getSetByNum(setNum);
-    const themeData = await getAllThemes();
+    let set = await legoData.getSetByNum(req.params.num);
+    let themes = await legoData.getAllThemes();
 
-    // Render the editSet view with the data
-    res.render('editSet', { themes: themeData, set: setData });
+    res.render("editSet", { set, themes });
   } catch (err) {
-    // If there's an error, render the 404 view with an appropriate message
-    res.status(404).render('404', { message: err.message || 'Set or themes not found.' });
+    res.status(404).render("404", { message: err });
+  }
+
+});
+
+app.post("/lego/editSet", async (req, res) => {
+
+  try {
+    await legoData.editSet(req.body.set_num, req.body);
+    res.redirect("/lego/sets");
+  } catch (err) {
+    res.render("500", { message: `I'm sorry, but we have encountered the following error: ${err}` });
   }
 });
 
-app.post('/lego/editSet', async (req, res) => {
-  const setNum = req.body.set_num; // The primary key is read-only
-  const setData = req.body; // Contains the updated set data
+//v1
+// app.get('/lego/editSet/:set_num', (req, res) => {
+//     const setNum = req.params.set_num;
+//     Promise.all([legoSets.getSetByNum(setNum), legoSets.getAllThemes()])
+//         .then(([setData, themeData]) => {
+//             res.render('editSet', { set: setData, themes: themeData });
+//         })
+//         .catch((err) => {
+//             res.status(404).render('404', { message: `Error loading data: ${err.message}` });
+//         });
+// });
 
-  try {
-    // Attempt to update the set
-    await editSet(setNum, setData);
+// app.post('/lego/editSet', (req, res) => {
+//   const setNum = req.body.set_num;
+//   const updatedData = req.body;
 
-    // On success, redirect to the list of sets
-    res.redirect('/lego/sets');
-  } catch (err) {
-    // If there's an error, render the 500 view with an appropriate message
-    res.render('500', { message: `I'm sorry, but we have encountered the following error: ${err.message}` });
-  }
-});
+//   legoSets.editSet(setNum, updatedData)
+//       .then(() => {
+//           res.redirect('/lego/sets');
+//       })
+//       .catch((err) => {
+//           res.render("500", { message: `I'm sorry, but we have encountered the following: ${err.message}` });
+//       });
+// });
+
+//v2
+// app.get('/lego/editSet/:num', async (req, res) => {
+//   const setNum = req.params.num;
+
+//   try {
+//     // Retrieve the specific set and all themes
+//     const setData = await getSetByNum(setNum);
+//     const themeData = await getAllThemes();
+
+//     // Render the editSet view with the data
+//     res.render('editSet', { themes: themeData, set: setData });
+//   } catch (err) {
+//     // If there's an error, render the 404 view with an appropriate message
+//     res.status(404).render('404', { message: err.message || 'Set or themes not found.' });
+//   }
+// });
+
+// // app.post('/lego/editSet', async (req, res) => {
+// //   const setNum = req.body.set_num; // The primary key is read-only
+// //   const setData = req.body; // Contains the updated set data
+
+// //   try {
+// //     // Attempt to update the set
+// //     await editSet(setNum, setData);
+
+// //     // On success, redirect to the list of sets
+// //     res.redirect('/lego/sets');
+// //   } catch (err) {
+// //     // If there's an error, render the 500 view with an appropriate message
+// //     res.render('500', { message: `I'm sorry, but we have encountered the following error: ${err.message}` });
+// //   }
+// // });
+// app.post('/lego/editSet', async (req, res) => {
+//   const setNum = req.body.set_num;  // The set_num is read-only
+//   const setData = {
+//     name: req.body.name,
+//     theme_id: req.body.theme_id,
+//     year: req.body.year,
+//     num_parts: req.body.num_parts,
+//   };
+
+//   try {
+//     // Attempt to update the set
+//     await editSet(setNum, setData);
+
+//     // On success, redirect to the list of sets
+//     res.redirect('/lego/sets');
+//   } catch (err) {
+//     // If there's an error, render the 500 view with an appropriate message
+//     res.render('500', { message: `I'm sorry, but we have encountered the following error: ${err.message}` });
+//   }
+// });
+
 
 
 
