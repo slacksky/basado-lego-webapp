@@ -21,6 +21,7 @@ const PORT = process.env.PORT || 8181;
 const path = require("path"); //config for the path review, vailidty and use then uncomment
 
 const legoData = require("./modules/legoSets");
+const authData = require("./modules/auth-service"); // Add auth-service reference
 
 app.set('views', path.join(__dirname, 'views'));
 
@@ -32,7 +33,7 @@ app.use(express.urlencoded({ extended: true })); // Parse URL-encoded form data
 
 
 
-legoData.initialize()
+Promise.all([legoData.initialize(), authData.initialize()])// legoData.initialize()
   .then(() => {
     app.listen(PORT, () => console.log(`Server running on ${PORT}`));
   })
