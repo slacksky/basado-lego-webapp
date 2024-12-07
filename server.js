@@ -12,7 +12,7 @@
 *
 ********************************************************************************/
 const express = require("express");
-
+const clientSessions = require("client-sessions");
 const app = express();
 
 app.set("view engine", "ejs");// ejs as the viewing engine
@@ -31,19 +31,43 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded form data
 
+app.use(clientSessions({
+  cookieName: "session", // Name of the session cookie
+  secret: "yourSecretKeyHere", // Replace with a secure random string
+  duration: 24 * 60 * 60 * 1000, // 1 day in milliseconds
+  activeDuration: 1000 * 60 * 5 // Extend by 5 minutes if active
+}));
+
+app.use((req, res, next) => {
+  res.locals.session = req.session; // Make session data accessible in views
+  next();
+});
 
 
-Promise.all([legoData.initialize(), authData.initialize()])// legoData.initialize()
+legoData.initialize()
+  .then(() => authData.initialize()) // Explicitly call authData.initialize
   .then(() => {
-    app.listen(PORT, () => console.log(`Server running on ${PORT}`));
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
   })
   .catch(err => {
-    console.error(`Error initializing Lego data: ${err}`);
+    console.error(`Unable to start server: ${err}`);
     process.exit(1);
   });
 
 
-//app.get("/", (req, res) => res.send("Assignment 3: Jorge Luis Vivas Castellanos - 166802223"));
+
+
+//routes section
+
+const ensureLogin = (req, res, next) => {
+  if (!req.session.userName) { // Check if user is logged in
+    res.redirect("/login"); // Redirect to login if not authenticated
+  } else {
+    next(); // User is authenticated, proceed
+  }
+};
 
 // Updated to serve the landing page (home.html)
 app.get("/", (req, res) => {
@@ -106,17 +130,17 @@ app.get('/lego/sets/:id', (req, res) => {
 });
 
 //addSet section
-app.get('/lego/addSet', (req, res) => {
-  legoData.getAllThemes() // Fetch all themes from the database
+app.get('/lego/addSet', ensureLogin, (req, res) => {
+  legoData.getAllThemes()
     .then(themes => {
-      res.render('addSet', { themes }); // Pass themes to the view
+      res.render('addSet', { themes });
     })
     .catch(err => {
       res.status(500).render('error', { message: 'Error loading themes' });
     });
 });
 
-app.post('/lego/addSet', (req, res) => {
+app.post('/lego/addSet',ensureLogin, (req, res) => {
   const { name, year, num_parts, img_url, theme_id, set_num } = req.body; // Extract form data
   
   legoData.createSet({
@@ -138,7 +162,7 @@ app.post('/lego/addSet', (req, res) => {
 
 //Edit Section reference 
 
-app.get("/lego/editSet/:num", async (req, res) => {
+app.get("/lego/editSet/:num", ensureLogin, async (req, res) => {
 
   try {
     let set = await legoData.getSetByNum(req.params.num);
@@ -151,7 +175,7 @@ app.get("/lego/editSet/:num", async (req, res) => {
 
 });
 
-app.post("/lego/editSet", async (req, res) => {
+app.post("/lego/editSet", ensureLogin, async (req, res) => {
 
   try {
     await legoData.editSet(req.body.set_num, req.body);
@@ -163,7 +187,7 @@ app.post("/lego/editSet", async (req, res) => {
 
 //delete section
 
-app.get("/lego/deleteSet/:num", (req, res) => {
+app.get("/lego/deleteSet/:num", ensureLogin, (req, res) => {
   const setNum = req.params.num;
 
   legoData.deleteSet(setNum)
