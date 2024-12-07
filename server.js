@@ -1,12 +1,12 @@
 /********************************************************************************
-*  WEB322 – Assignment 05
+*  WEB322 – Assignment 06
 * 
 *  I declare that this assignment is my own work in accordance with Seneca's
 *  Academic Integrity Policy:
 * 
 *  https://www.senecacollege.ca/about/policies/academic-integrity-policy.html
 * 
-*  Name: Jorge Luis Vivas Castellanos Student ID: 1126255291 Date: 11Nov24
+*  Name: Jorge Luis Vivas Castellanos Student ID: 1126255291 Date: 06dec24
 *
 *  Published URL: https://basado-lego-webapp-cld7.vercel.app/
 *
@@ -201,21 +201,32 @@ app.get("/lego/deleteSet/:num", ensureLogin, (req, res) => {
 
 // User Authentication Section
 app.get("/register", (req, res) => {
-  res.render("register"); // Render a registration form view
+  res.render("register", { 
+    successMessage: null, 
+    errorMessage: null, 
+    userName: "" // Ensure `userName` is defined, even as an empty string
+  });
 });
 
+
 app.post("/register", (req, res) => {
-  authData.registerUser(req.body) // Call the registerUser function from authData
+  authData.registerUser(req.body)
     .then(() => {
-      res.render("register", { successMessage: "User created" }); // Success message
+      res.render("register", { 
+        successMessage: "User created", 
+        errorMessage: null, 
+        userName: "" // Reset `userName` to an empty string on success
+      });
     })
     .catch(err => {
-      res.render("register", {
-        errorMessage: err,
-        userName: req.body.userName // Return the username so the user doesn't have to re-enter it
+      res.render("register", { 
+        successMessage: null, 
+        errorMessage: err, 
+        userName: req.body.userName || "" // Pre-fill the username field with user input on failure
       });
     });
 });
+
 
 
 // app.get("/login", (req, res) => {

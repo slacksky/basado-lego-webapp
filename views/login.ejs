@@ -16,7 +16,7 @@
         name="userName"
         id="userName"
         placeholder="User Name"
-        value="<%= userName || '' %>"
+        value="<%= typeof userName !== 'undefined' ? userName : '' %>"
         required
       />
     </div>
@@ -34,7 +34,7 @@
   </form>
 
   <!-- Error output -->
-  <% if (errorMessage) { %>
+  <% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
     <div class="alert alert-error">
       <svg
         xmlns="http://www.w3.org/2000/svg"

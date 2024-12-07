@@ -11,8 +11,8 @@
   <section class="hero">
     <div class="hero-content">
       <h1>User History</h1>
-      <p><strong>User Name:</strong> <%= session.user.userName %></p>
-      <p><strong>Email:</strong> <%= session.user.email %></p>
+      <p><strong>User Name:</strong> <%= session.user?.userName %></p>
+      <p><strong>Email:</strong> <%= session.user?.email %></p>
     </div>
   </section>
 
@@ -26,7 +26,7 @@
         </tr>
       </thead>
       <tbody>
-        <% session.user.loginHistory.forEach((entry) => { %>
+        <% session.user?.loginHistory?.forEach((entry) => { %>
           <tr>
             <td><%= new Date(entry.dateTime).toLocaleString() %></td>
             <td><%= entry.userAgent %></td>

@@ -9,9 +9,9 @@
 <body>
   <h1>Register</h1>
 
-  <% if (successMessage) { %>
-    <!-- Success message and navigation to login -->
-    <div class="alert">
+  <!-- Success message section -->
+  <% if (typeof successMessage !== 'undefined' && successMessage) { %>
+    <div class="alert alert-success">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="stroke-current shrink-0 h-6 w-6"
@@ -30,7 +30,6 @@
     <br />
     <a href="/login" class="btn btn-success">Proceed to Log in</a>
   <% } else { %>
-    <!-- Registration form -->
     <form action="/register" method="POST">
       <div>
         <label for="userName">User Name:</label>
@@ -39,7 +38,7 @@
           name="userName"
           id="userName"
           placeholder="User Name"
-          value="<%= userName || '' %>"
+          value="<%= typeof userName !== 'undefined' ? userName : '' %>"
           required
         />
       </div>
@@ -76,8 +75,8 @@
       <button type="submit">Register</button>
     </form>
 
-    <!-- Error output -->
-    <% if (errorMessage) { %>
+    <!-- Error message section -->
+    <% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
       <div class="alert alert-error">
         <svg
           xmlns="http://www.w3.org/2000/svg"
