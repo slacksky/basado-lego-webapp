@@ -1,33 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User History</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User History</title>
+  <!-- Include daisyUI or similar CSS framework -->
 </head>
 <body>
-    <h1>Welcome, <%= user.userName %>!</h1>
-    <p>Email: <%= user.email %></p>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>User History</h1>
+      <p><strong>User Name:</strong> <%= session.user.userName %></p>
+      <p><strong>Email:</strong> <%= session.user.email %></p>
+    </div>
+  </section>
 
-    <h2>Login History</h2>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>IP Address</th>
-                <th>User Agent</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% user.loginHistory.forEach(history => { %>
-                <tr>
-                    <td><%= history.dateTime %></td>
-                    <td><%= history.ipAddress %></td>
-                    <td><%= history.userAgent %></td>
-                </tr>
-            <% }); %>
-        </tbody>
+  <!-- Login History Table -->
+  <section class="login-history">
+    <table class="table table-zebra">
+      <thead>
+        <tr>
+          <th>Login Date/Time</th>
+          <th>Client Information</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% session.user.loginHistory.forEach((entry) => { %>
+          <tr>
+            <td><%= new Date(entry.dateTime).toLocaleString() %></td>
+            <td><%= entry.userAgent %></td>
+          </tr>
+        <% }) %>
+      </tbody>
     </table>
-    <a href="/logout">Logout</a>
+  </section>
 </body>
 </html>

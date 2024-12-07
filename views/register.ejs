@@ -1,37 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register</title>
+  <!-- Include daisyUI or similar CSS framework -->
 </head>
 <body>
-    <h1>Register</h1>
-    <% if (successMessage) { %>
-        <p style="color: green;"><%= successMessage %></p>
-    <% } %>
-    <% if (errorMessage) { %>
-        <p style="color: red;"><%= errorMessage %></p>
-    <% } %>
+  <h1>Register</h1>
+
+  <% if (successMessage) { %>
+    <!-- Success message and navigation to login -->
+    <div class="alert">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="stroke-current shrink-0 h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+      <span><%= successMessage %></span>
+    </div>
+    <br />
+    <a href="/login" class="btn btn-success">Proceed to Log in</a>
+  <% } else { %>
+    <!-- Registration form -->
     <form action="/register" method="POST">
-        <div>
-            <label for="userName">Username:</label>
-            <input type="text" name="userName" id="userName" value="<%= userName || '' %>" required>
-        </div>
-        <div>
-            <label for="email">Email:</label>
-            <input type="email" name="email" id="email" required>
-        </div>
-        <div>
-            <label for="password">Password:</label>
-            <input type="password" name="password" id="password" required>
-        </div>
-        <div>
-            <label for="password2">Confirm Password:</label>
-            <input type="password" name="password2" id="password2" required>
-        </div>
-        <button type="submit">Register</button>
+      <div>
+        <label for="userName">User Name:</label>
+        <input
+          type="text"
+          name="userName"
+          id="userName"
+          placeholder="User Name"
+          value="<%= userName || '' %>"
+          required
+        />
+      </div>
+      <div>
+        <label for="email">Email Address:</label>
+        <input
+          type="email"
+          name="email"
+          id="email"
+          placeholder="Email Address"
+          required
+        />
+      </div>
+      <div>
+        <label for="password">Password:</label>
+        <input
+          type="password"
+          name="password"
+          id="password"
+          placeholder="Password"
+          required
+        />
+      </div>
+      <div>
+        <label for="password2">Confirm Password:</label>
+        <input
+          type="password"
+          name="password2"
+          id="password2"
+          placeholder="Confirm Password"
+          required
+        />
+      </div>
+      <button type="submit">Register</button>
     </form>
-    <p>Already have an account? <a href="/login">Login here</a>.</p>
+
+    <!-- Error output -->
+    <% if (errorMessage) { %>
+      <div class="alert alert-error">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="stroke-current shrink-0 h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        <span><%= errorMessage %></span>
+      </div>
+    <% } %>
+  <% } %>
 </body>
 </html>
