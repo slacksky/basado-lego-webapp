@@ -205,30 +205,51 @@ app.get("/register", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-  authData
-    .registerUser(req.body)
+  authData.registerUser(req.body) // Call the registerUser function from authData
     .then(() => {
-      res.redirect("/login"); // Redirect to login on success
+      res.render("register", { successMessage: "User created" }); // Success message
     })
-    .catch((err) => {
-      res.status(400).render("register", { error: err }); // Re-render with an error message
+    .catch(err => {
+      res.render("register", {
+        errorMessage: err,
+        userName: req.body.userName // Return the username so the user doesn't have to re-enter it
+      });
     });
 });
+
 
 app.get("/login", (req, res) => {
   res.render("login"); // Render a login form view
 });
 
 app.post("/login", (req, res) => {
-  authData
-    .checkUser(req.body)
-    .then((user) => {
-      // Store user session or cookie logic can go here
-      res.redirect("/dashboard"); // Redirect to a protected route on success
+  req.body.userAgent = req.get('User-Agent'); // Set the User-Agent in the request body
+
+  authData.checkUser(req.body)
+    .then(user => {
+      req.session.user = { // Save user details in the session
+        userName: user.userName,
+        email: user.email,
+        loginHistory: user.loginHistory
+      };
+      res.redirect("/lego/sets"); // Redirect to the Lego sets view
     })
-    .catch((err) => {
-      res.status(400).render("login", { error: err }); // Re-render with an error message
+    .catch(err => {
+      res.render("login", {
+        errorMessage: err,
+        userName: req.body.userName // Return the username so the user doesn't have to re-enter it
+      });
     });
+});
+
+app.get("/logout", (req, res) => {
+  req.session.reset(); // Reset the session
+  res.redirect("/"); // Redirect to the home page
+});
+
+
+app.get("/userHistory", ensureLogin, (req, res) => {
+  res.render("userHistory", { user: req.session.user }); // Pass the session user to the view
 });
 
 

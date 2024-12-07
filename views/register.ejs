@@ -4,29 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
-    <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
     <h1>Register</h1>
+    <% if (successMessage) { %>
+        <p style="color: green;"><%= successMessage %></p>
+    <% } %>
     <% if (errorMessage) { %>
-        <p class="error"><%= errorMessage %></p>
+        <p style="color: red;"><%= errorMessage %></p>
     <% } %>
     <form action="/register" method="POST">
         <div>
             <label for="userName">Username:</label>
-            <input type="text" id="userName" name="userName" required>
+            <input type="text" name="userName" id="userName" value="<%= userName || '' %>" required>
         </div>
         <div>
             <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
+            <input type="email" name="email" id="email" required>
         </div>
         <div>
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
+            <input type="password" name="password" id="password" required>
         </div>
         <div>
             <label for="password2">Confirm Password:</label>
-            <input type="password" id="password2" name="password2" required>
+            <input type="password" name="password2" id="password2" required>
         </div>
         <button type="submit">Register</button>
     </form>

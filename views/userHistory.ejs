@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User History</title>
+</head>
+<body>
+    <h1>Welcome, <%= user.userName %>!</h1>
+    <p>Email: <%= user.email %></p>
+
+    <h2>Login History</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>IP Address</th>
+                <th>User Agent</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% user.loginHistory.forEach(history => { %>
+                <tr>
+                    <td><%= history.dateTime %></td>
+                    <td><%= history.ipAddress %></td>
+                    <td><%= history.userAgent %></td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+    <a href="/logout">Logout</a>
+</body>
+</html>
