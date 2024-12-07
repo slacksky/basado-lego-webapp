@@ -69,7 +69,7 @@ const registerUser = (userData) => {
 // Authenticate a user
 const checkUser = (userData) => {
     return new Promise((resolve, reject) => {
-        User.findOne({ userName: userData.userName })
+        User.findOne({ userName: userData.userName })//check if it works or if find is needed
             .then((user) => {
                 if (!user) {
                     reject(`Unable to find user: ${userData.userName}`);

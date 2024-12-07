@@ -175,6 +175,39 @@ app.get("/lego/deleteSet/:num", (req, res) => {
       });
 });
 
+// User Authentication Section
+app.get("/register", (req, res) => {
+  res.render("register"); // Render a registration form view
+});
+
+app.post("/register", (req, res) => {
+  authData
+    .registerUser(req.body)
+    .then(() => {
+      res.redirect("/login"); // Redirect to login on success
+    })
+    .catch((err) => {
+      res.status(400).render("register", { error: err }); // Re-render with an error message
+    });
+});
+
+app.get("/login", (req, res) => {
+  res.render("login"); // Render a login form view
+});
+
+app.post("/login", (req, res) => {
+  authData
+    .checkUser(req.body)
+    .then((user) => {
+      // Store user session or cookie logic can go here
+      res.redirect("/dashboard"); // Redirect to a protected route on success
+    })
+    .catch((err) => {
+      res.status(400).render("login", { error: err }); // Re-render with an error message
+    });
+});
+
+
 
 // Handling of server errors (500)
 app.use((err, req, res, next) => {
