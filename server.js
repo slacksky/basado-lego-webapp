@@ -218,9 +218,13 @@ app.post("/register", (req, res) => {
 });
 
 
+// app.get("/login", (req, res) => {
+//   res.render("login"); // Render a login form view
+// });
 app.get("/login", (req, res) => {
-  res.render("login"); // Render a login form view
+  res.render("login", { userName: '', errorMessage: '' }); // Initialize errorMessage as an empty string
 });
+
 
 app.post("/login", (req, res) => {
   req.body.userAgent = req.get('User-Agent'); // Set the User-Agent in the request body
